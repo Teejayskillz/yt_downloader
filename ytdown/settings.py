@@ -83,22 +83,41 @@ WSGI_APPLICATION = 'ytdown.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# --- DEBUGGING START ---
+# Get DATABASE_URL from environment for explicit inspection
+_db_url_from_env = os.getenv('DATABASE_URL')
+
+print(f"DEBUG: Value of DATABASE_URL from os.getenv: '{_db_url_from_env}'")
+
+if not _db_url_from_env:
+    print("DEBUG: DATABASE_URL is empty or None! This will cause an error.")
+    # You could raise an exception here to stop execution immediately:
+    # raise Exception("DATABASE_URL environment variable is not set or empty!")
+
 # Use dj_database_url to parse the DATABASE_URL environment variable
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'), # Get DATABASE_URL from .env
+        default=_db_url_from_env, # Pass the variable directly
         conn_max_age=600 # Optional: Reconnect after 10 minutes
     )
 }
+print(f"DEBUG: DATABASES['default'] after dj_database_url.config: {DATABASES['default']}")
+
+# --- DEBUGGING END ---
+
 
 # Ensure the MySQL engine is set correctly by dj_database_url,
 # and add common options if needed (dj_database_url handles many defaults)
 # You might want to explicitly set charset for full emoji support if not handled by default
 # This part is generally covered by dj_database_url, but for explicit control:
-if DATABASES['default']['ENGINE'] == 'django.db.backends.mysql':
+if 'ENGINE' in DATABASES['default'] and DATABASES['default']['ENGINE'] == 'django.db.backends.mysql':
     if 'OPTIONS' not in DATABASES['default']:
         DATABASES['default']['OPTIONS'] = {}
     DATABASES['default']['OPTIONS']['charset'] = 'utf8mb4'
+    print("DEBUG: MySQL charset utf8mb4 option applied.")
+else:
+    # This might happen if DATABASE_URL was invalid and django didn't set an engine
+    print(f"DEBUG: MySQL backend not detected or 'ENGINE' key missing. Current engine: {DATABASES['default'].get('ENGINE', 'N/A')}")
 
 
 # Password validation
