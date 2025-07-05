@@ -15,9 +15,9 @@ proglog==0.1.12
 PyMySQL==1.1.1
 python-decouple==3.8
 python-dotenv==1.1.0
-pytube==15.0.0
 pytubefix==9.2.0
 requests==2.32.4
 sqlparse==0.5.3
 tqdm==4.67.1
 urllib3==2.5.0
+yt-dlp==2025.6.30
