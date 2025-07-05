@@ -1,0 +1,46 @@
+<!-- downloader/templates/downloder/convert.html -->
+{% extends 'downloader/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">{{ title }}</h3>
+                    <div class="alert alert-info">
+                        This file will be available until {{ download.expires_at|timeuntil }} from now
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'download_from_link' download.id %}" class="btn btn-primary btn-lg">
+                            Download Now
+                        </a>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h5>Share this conversion</h5>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="shareLink" value="{{ share_link }}" readonly>
+                            <button class="btn btn-outline-secondary" onclick="copyShareLink()">Copy</button>
+                        </div>
+                        <p class="text-muted">Anyone with this link can download the file until it expires.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyShareLink() {
+    const copyText = document.getElementById("shareLink");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    
+    // Show tooltip or alert
+    alert("Link copied to clipboard!");
+}
+</script>
+{% endblock %}

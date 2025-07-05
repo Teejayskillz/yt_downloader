@@ -1,0 +1,45 @@
+<!-- downloader/templates/downloder/home.html -->
+{% extends 'downloader/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">YouTube Video Downloader</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="url" 
+                                   name="video_url" 
+                                   class="form-control {% if error %}is-invalid{% endif %}" 
+                                   placeholder="Paste YouTube URL here..." 
+                                   value="{{ video_url|default:'' }}"
+                                   required>
+                            <div class="invalid-feedback">
+                                Please enter a valid YouTube URL
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block mt-3">
+                            Get Video Info
+                        </button>
+                    </form>
+                    
+                    <div class="mt-4">
+                        <h5>Supported URL Formats:</h5>
+                        <ul>
+                            <li>https://www.youtube.com/watch?v=VIDEO_ID</li>
+                            <li>https://youtu.be/VIDEO_ID</li>
+                            <li>https://youtube.com/shorts/VIDEO_ID</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
