@@ -1,4 +1,3 @@
-<!-- downloader/templates/downloder/download.html -->
 {% extends 'downloader/base.html' %}
 
 {% block content %}
@@ -18,6 +17,7 @@
                         <form method="post" action="{% url 'download_video' %}" class="list-group-item list-group-item-action">
                             {% csrf_token %}
                             <input type="hidden" name="video_url" value="{{ url }}">
+                            <input type="hidden" name="video_id" value="{{ video_id }}"> {# ADDED THIS LINE #}
                             <input type="hidden" name="itag" value="{{ stream.itag }}">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span>{{ stream.resolution }} ({{ stream.mime_type }}) - {{ stream.filesize|filesizeformat }}</span>
@@ -27,21 +27,7 @@
                         {% endfor %}
                     </div>
                     
-                    <h4>Audio Only</h4>
-                    <div class="list-group mb-4">
-                        {% for stream in audio_streams %}
-                        <form method="post" action="{% url 'download_video' %}" class="list-group-item list-group-item-action">
-                            {% csrf_token %}
-                            <input type="hidden" name="video_url" value="{{ url }}">
-                            <input type="hidden" name="itag" value="{{ stream.itag }}">
-                            <input type="hidden" name="convert_to_mp3" value="true">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span>Audio ({{ stream.abr }}) - {{ stream.filesize|filesizeformat }}</span>
-                                <button type="submit" class="btn btn-sm btn-primary">Convert to MP3</button>
-                            </div>
-                        </form>
-                        {% endfor %}
-                    </div>
+                    {# Removed the "Audio Only" section as requested #}
                 </div>
             </div>
         </div>
